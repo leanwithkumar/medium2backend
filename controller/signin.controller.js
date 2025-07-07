@@ -27,14 +27,19 @@ export const Signin = async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    res.cookie("medium2token", token,{
-        httpOnly : true,
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
+    res.cookie("medium2token", token, {
+    httpOnly: true,
+    secure: false,       
+    sameSite: "lax",     
+    maxAge: 24 * 60 * 60 * 1000, 
+    });
 
-    })
     return res.status(200).json({
       message: "Login successful",
+      username: verifyuser.username,
+      email: verifyuser.email,
+      userId: verifyuser._id
+
     });
   } catch (err) {
     if (err.name === "ZodError") {

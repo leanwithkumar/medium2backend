@@ -1,14 +1,22 @@
 import express from "express"
 import cors from "cors"
-import dotenv from "dotenv"
+import jwt from 'jsonwebtoken'
 import Databaseconnection from "./models/databseconn.js"
 import bodyParser from "body-parser"
 import signuproute from "./routes/signup.route.js"
 import signinroute from "./routes/signin.route.js"
 import signoutroute from "./routes/logout.route.js"
-import verifyAuth from "./routes/verify.route.js"
 import cookieParser from "cookie-parser"
+import addblogroute from "./routes/addblog.route.js"
+import userdetailsroute from "./routes/userdetails.route.js"
+import userblogs from "./routes/userblogs.route.js"
+import readblog from "./routes/readblog.route.js"
+import treandingblogs from "./routes/trendingblogs.route.js"
+import searchblog from "./routes/searchblog.route.js"
+import dotenv from "dotenv"
 dotenv.config()
+import editrouter from "./routes/editblog.route.js"
+
 const app = express()
 const port = process.env.PORT
 
@@ -22,7 +30,31 @@ app.use(cookieParser())
 app.use('/', signuproute)
 app.use('/', signinroute)
 app.use('/', signoutroute)
-app.use('/', verifyAuth)
+
+app.use('/', userdetailsroute)
+app.use('/', addblogroute )
+app.use('/', userblogs)
+app.use('/', readblog)
+app.use("/", treandingblogs);
+app.use("/", searchblog);
+app.use("/", editrouter);
+
+
+
+app.get("/verify", (req, res) => {
+  const token = req.cookies?.medium2token;
+
+  if (!token) {
+    return res.status(400).json({ message: "signin needed" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res.status(400).json({ message: "invalid or expired token" });
+  }
+});
 
 
 
