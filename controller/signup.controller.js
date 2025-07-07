@@ -28,6 +28,7 @@ const signup  = async(req, res)=>{
        })
     }
     catch(err){
+        console.error("Signup Error:", err);
         if (err.name === "ZodError") {
         const messages = err.errors.map(e => e.message);
         return res.status(400).json({

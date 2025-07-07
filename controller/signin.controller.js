@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const Signin = async (req, res) => {
+  console.log("request recieved")
   try {
     const validuser = signinvalidation.parse(req.body);
     const verifyuser = await users.findOne({ email: validuser.email });

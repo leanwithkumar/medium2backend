@@ -20,10 +20,12 @@ import editrouter from "./routes/editblog.route.js"
 const app = express()
 const port = process.env.PORT
 
+
 app.use(cors({
-  origin: 'https://medium2-eosin.vercel.app',
+  origin: ['http://localhost:5173', 'https://medium2-eosin.vercel.app'],
   credentials: true
 }));
+
 app.use(bodyParser.json())
 app.use(cookieParser())
 
