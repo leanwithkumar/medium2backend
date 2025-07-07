@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+const mongo_url = process.env.MONGO_URL;
 
 export default async function Databaseconnection(){
     try{
-        await mongoose.connect(process.env.MONGODB_URL)
+        await mongoose.connect(process.env.mongo_url)
         console.log("data base connected")
 
 
