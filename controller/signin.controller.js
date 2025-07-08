@@ -30,8 +30,8 @@ export const Signin = async (req, res) => {
 
     res.cookie("medium2token", token, {
     httpOnly: true,
-    secure: false,       
-    sameSite: "lax",     
+    secure: true,       
+    sameSite: "None",     
     maxAge: 24 * 60 * 60 * 1000, 
     });
 
