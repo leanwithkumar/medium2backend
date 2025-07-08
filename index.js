@@ -23,16 +23,27 @@ import editrouter from "./routes/editblog.route.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ CORS setup for local + vercel
+const allowedOrigins = [
+  "https://medium2-eosin.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(cors({
-  origin: true,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
+
+app.options('*', cors());
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// ✅ Route setup
 app.use("/", signuproute);
 app.use("/", signinroute);
 app.use("/", signoutroute);
@@ -44,7 +55,6 @@ app.use("/", treandingblogs);
 app.use("/", searchblog);
 app.use("/", editrouter);
 
-// ✅ Token check route
 app.get("/verify", (req, res) => {
   const token = req.cookies?.medium2token;
 
@@ -60,13 +70,12 @@ app.get("/verify", (req, res) => {
   }
 });
 
-// ✅ Start server only after DB connects
 Databaseconnection()
   .then(() => {
     app.listen(port, () => {
-      console.log(`✅ Server running on port ${port}`);
+      console.log(`Server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.log("❌ DB connection failed:", err.message);
+    console.log("DB connection failed:", err.message);
   });
