@@ -25,7 +25,7 @@ const port = process.env.PORT || 5000;
 
 // ✅ CORS setup for local + vercel
 app.use(cors({
-  origin: ["http://localhost:5173", "https://medium2-eosin.vercel.app"],
+  origin: true,
   credentials: true
 }));
 
