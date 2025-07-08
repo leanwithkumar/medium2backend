@@ -23,22 +23,10 @@ import editrouter from "./routes/editblog.route.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
-const allowedOrigins = [
-  "https://medium2-eosin.vercel.app",
-  "http://localhost:5173"
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: true,
   credentials: true
 }));
-
 app.options('*', cors());
 
 app.use(bodyParser.json());
@@ -73,9 +61,9 @@ app.get("/verify", (req, res) => {
 Databaseconnection()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+      console.log(`✅ Server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.log("DB connection failed:", err.message);
+    console.log("❌ DB connection failed:", err.message);
   });
