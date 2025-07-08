@@ -23,22 +23,16 @@ import editrouter from "./routes/editblog.route.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ Recommended CORS configuration for Render + Vercel
-const corsOptions = {
+// ✅ CORS setup for local + vercel
+app.use(cors({
   origin: ["http://localhost:5173", "https://medium2-eosin.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-// ✅ Allow preflight requests to be handled correctly
-app.options("*", cors(corsOptions));
+  credentials: true
+}));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// ✅ API routes
+// ✅ Route setup
 app.use("/", signuproute);
 app.use("/", signinroute);
 app.use("/", signoutroute);
@@ -50,12 +44,7 @@ app.use("/", treandingblogs);
 app.use("/", searchblog);
 app.use("/", editrouter);
 
-// ✅ Optional health check
-app.get("/ping", (req, res) => {
-  res.json({ message: "pong", origin: req.headers.origin });
-});
-
-// ✅ Token verification endpoint
+// ✅ Token check route
 app.get("/verify", (req, res) => {
   const token = req.cookies?.medium2token;
 
@@ -71,13 +60,13 @@ app.get("/verify", (req, res) => {
   }
 });
 
-// ✅ Start server after DB connects
+// ✅ Start server only after DB connects
 Databaseconnection()
   .then(() => {
     app.listen(port, () => {
-      console.log(`✅ Server is running on port ${port}`);
+      console.log(`✅ Server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.log("❌ Database connection failed:", err.message);
+    console.log("❌ DB connection failed:", err.message);
   });
